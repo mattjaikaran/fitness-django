@@ -1,23 +1,20 @@
-from rest_framework import generics
+from rest_framework import viewsets, mixins
 from .serializers import LocationSerializer
 from .models import Location
 
-
-class ListLocations(generics.ListAPIView):
+class LocationViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
     queryset = Location.objects.all()
-    serializer_class = LocationSerializer
 
+    def get_queryset(self):
+        return Location.objects.all()
 
-class DetailLocation(generics.RetrieveUpdateAPIView):
-    queryset = Location.objects.all()
-    serializer_class = LocationSerializer
+    def get_serializer_class(self):
+        return LocationSerializer
 
-
-class CreateLocation(generics.CreateAPIView):
-    queryset = Location.objects.all()
-    serializer_class = LocationSerializer
-
-
-class DeleteLocation(generics.DestroyAPIView):
-    queryset = Location.objects.all()
-    serializer_class = LocationSerializer

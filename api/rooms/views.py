@@ -1,23 +1,20 @@
-from rest_framework import generics
-from .serializers import RoomSerializer
+from rest_framework import viewsets, mixins
 from .models import Room
+from .serializers import RoomSerializer
 
 
-class ListRooms(generics.ListAPIView):
+class RoomViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
     queryset = Room.objects.all()
-    serializer_class = RoomSerializer
 
+    def get_queryset(self):
+        return Room.objects.all()
 
-class DetailRoom(generics.RetrieveUpdateAPIView):
-    queryset = Room.objects.all()
-    serializer_class = RoomSerializer
-
-
-class CreateRoom(generics.CreateAPIView):
-    queryset = Room.objects.all()
-    serializer_class = RoomSerializer
-
-
-class DeleteRoom(generics.DestroyAPIView):
-    queryset = Room.objects.all()
-    serializer_class = RoomSerializer
+    def get_serializer_class(self):
+        return RoomSerializer

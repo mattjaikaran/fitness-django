@@ -1,23 +1,20 @@
-from rest_framework import generics
+from rest_framework import viewsets, mixins
 from .models import Instructor
 from .serializers import InstructorSerializer
 
 
-class ListInstructors(generics.ListAPIView):
+class InstructorViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
     queryset = Instructor.objects.all()
-    serializer_class = InstructorSerializer
 
+    def get_queryset(self):
+        return Instructor.objects.all()
 
-class DetailInstructor(generics.RetrieveUpdateAPIView):
-    queryset = Instructor.objects.all()
-    serializer_class = InstructorSerializer
-
-
-class CreateInstructor(generics.CreateAPIView):
-    queryset = Instructor.objects.all()
-    serializer_class = InstructorSerializer
-
-
-class DeleteInstructor(generics.DestroyAPIView):
-    queryset = Instructor.objects.all()
-    serializer_class = InstructorSerializer
+    def get_serializer_class(self):
+        return InstructorSerializer

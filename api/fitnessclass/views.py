@@ -1,23 +1,19 @@
-from rest_framework import generics
+from rest_framework import viewsets, mixins
 from .models import FitnessClass
 from .serializers import FitnessClassSerializer
 
-
-class ListFitnessClasses(generics.ListAPIView):
+class FitnessClassViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
     queryset = FitnessClass.objects.all()
-    serializer_class = FitnessClassSerializer
 
+    def get_queryset(self):
+        return FitnessClass.objects.all()
 
-class DetailFitnessClass(generics.RetrieveUpdateAPIView):
-    queryset = FitnessClass.objects.all()
-    serializer_class = FitnessClassSerializer
-
-
-class CreateFitnessClass(generics.CreateAPIView):
-    queryset = FitnessClass.objects.all()
-    serializer_class = FitnessClassSerializer
-
-
-class DeleteFitnessClass(generics.DestroyAPIView):
-    queryset = FitnessClass.objects.all()
-    serializer_class = FitnessClassSerializer
+    def get_serializer_class(self):
+        return FitnessClassSerializer
